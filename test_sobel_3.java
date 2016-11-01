@@ -5,11 +5,11 @@ import java.io.*;
 
 public class test_sobel_3 {
 	public static void main(String args[]) {
-		ImageOriginale i = new ImageOriginale("sobel2.jpg");
+		ImageOriginale i = new ImageOriginale("images/Valve_original.PNG");
 		sobelFilter f = new sobelFilter();
 		
 		i.applyFilter(f);
 		
-		i.save("test_sobel.jpg");
+		i.save("images/test_sobel.PNG");
 	}
 }

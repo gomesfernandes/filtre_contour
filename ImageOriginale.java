@@ -48,18 +48,29 @@ class ImageOriginale {
 		rgb = image.getRGB(0, 0, width, height, null, 0, width);
    }
    
+   private static String getFileExtension(String filename) {
+		String extension = "";
+		int i = filename.lastIndexOf('.');
+		if (i > 0) {
+			extension = filename.substring(i+1).toLowerCase();
+		}
+		return extension;
+   }
+   
    public void save() {
+	   String extension = getFileExtension(filename);
 		try {
-			ImageIO.write(image, "jpg",new File(filename));
+			ImageIO.write(image, extension,new File(filename));
 		} catch (IOException io) {
 			System.out.println("Cannot save to file.");
 		}
    }
    
     public void save(String newname) {
+		String extension = getFileExtension(newname);
 		try {
 			File outputfile = new File(newname);
-			ImageIO.write(image, "jpg",outputfile);
+			ImageIO.write(image, extension,outputfile);
 		} catch (IOException io) {
 			System.out.println("Cannot save to file.");
 		}
