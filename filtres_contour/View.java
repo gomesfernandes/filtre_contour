@@ -6,7 +6,6 @@ import java.io.IOException;
 import javax.swing.*;
  
 
-
 public class View extends JFrame{
  
 	private static final long serialVersionUID = 1L;
@@ -70,9 +69,9 @@ public class View extends JFrame{
   class BoutonListener implements ActionListener{
     public void actionPerformed(ActionEvent arg0) {
 		i.applyFilter(f);
-		i.save("images/test_sobel.PNG");
-    	label.setIcon(new ImageIcon("images/test_sobel.PNG"));
-		//label.setIcon(new ImageIcon(i.getByteArray()));
+		//i.save("images/test_sobel.PNG");
+    	//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
+		label.setIcon(new ImageIcon(i.getByteArray()));
     }
   }
       
@@ -80,26 +79,29 @@ public class View extends JFrame{
   class Bouton2Listener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
     	i.applyFilter(r);
-		i.save("images/test_sobel.PNG");
-    	label.setIcon(new ImageIcon("images/test_sobel.PNG"));
+		//i.save("images/test_sobel.PNG");
+    	//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
+		label.setIcon(new ImageIcon(i.getByteArray()));
     }
   }     
   
   class Bouton3Listener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
     	i.applyFilter(p);
-		i.save("images/test_sobel.PNG");
-    	label.setIcon(new ImageIcon("images/test_sobel.PNG"));
+		//i.save("images/test_sobel.PNG");
+		//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
+		label.setIcon(new ImageIcon(i.getByteArray()));
     }
   }  
   
   class Bouton4Listener implements ActionListener{
-	    public void actionPerformed(ActionEvent e) {
-	    	i.applyTreshold();
-			i.save("images/test_sobel.PNG");
-	    	label.setIcon(new ImageIcon("images/test_sobel.PNG"));
-	    }
-	}  
+	public void actionPerformed(ActionEvent e) {
+		i.applyTreshold();
+		//i.save("images/test_sobel.PNG");
+		//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
+		label.setIcon(new ImageIcon(i.getByteArray()));
+	}
+  }  
   
   class BoutonFermerListener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
