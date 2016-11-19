@@ -18,7 +18,7 @@ public class View extends JFrame{
 	private JLabel label = new JLabel();
     //private Image image ;
   
-	ImageOriginale i = new ImageOriginale("images/Valve_original.png");
+	ImageOriginale i = new ImageOriginale("images/Valve.png");
 	SobelFilter f = new SobelFilter();
 	RobertsCrossFilter r = new RobertsCrossFilter();
 	PrewittFilter p = new PrewittFilter();
@@ -59,7 +59,7 @@ public class View extends JFrame{
     };*/
     
     label.setHorizontalAlignment(JLabel.CENTER);
-    label.setIcon(new ImageIcon("images/Valve_original.png"));
+    label.setIcon(new ImageIcon("images/Valve.png"));
     container.add(label, BorderLayout.CENTER);
     this.setContentPane(container);
     this.setVisible(true);

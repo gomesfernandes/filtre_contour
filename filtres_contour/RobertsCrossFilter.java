@@ -9,16 +9,15 @@ class RobertsCrossFilter extends Filtre {
 		int[][] pixelMatrix=new int[2][2];
 		for(int i=0;i<w-1;i++){
 			for(int j=0;j<h-1;j++){
-				pixelMatrix[0][1]=new Color(img[i][j+1]).getRed();
-				pixelMatrix[1][0]=new Color(img[i+1][j]).getRed();
-				
 				pixelMatrix[0][0]=new Color(img[i][j]).getRed();
+				pixelMatrix[0][1]=new Color(img[i+1][j]).getRed();
+				pixelMatrix[1][0]=new Color(img[i][j+1]).getRed();
 				pixelMatrix[1][1]=new Color(img[i+1][j+1]).getRed();
 
-				x = (pixelMatrix[0][1])+
-					(pixelMatrix[1][0]*-1);
-				y = (pixelMatrix[0][0]*1)+
+				x = (pixelMatrix[0][0])+
 					(pixelMatrix[1][1]*-1);
+				y = (pixelMatrix[0][1])+
+					(pixelMatrix[1][0]*-1);
 					
 				R = (int) Math.sqrt(Math.pow(y,2)+Math.pow(x,2));
 				
