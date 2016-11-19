@@ -36,6 +36,8 @@ class ImageOriginale {
    
    public int getHeight() {return height;}
    public int getWidth() {return width;}
+   public int[] getRGB() {return rgb;}
+   public int[][] getPixels() {return pixels;}
    
    public void applyFilter(Filtre f) {
 	   int i, j;
@@ -48,6 +50,17 @@ class ImageOriginale {
 		rgb = image.getRGB(0, 0, width, height, null, 0, width);
    }
    
+   public void applyTreshold() {
+	   int i, j;
+		pixels = Vectorisation.treshold(pixels,width,height);
+		for (i=0; i<width; i++) {
+			for (j=0; j<height; j++) {
+				image.setRGB(i,j,pixels[i][j]); 
+			}
+		} 
+		rgb = image.getRGB(0, 0, width, height, null, 0, width);
+   }
+    
    private static String getFileExtension(String filename) {
 		String extension = "";
 		int i = filename.lastIndexOf('.');
@@ -75,5 +88,19 @@ class ImageOriginale {
 			System.out.println("Cannot save to file.");
 		}
    }
+    
+    public byte[] getByteArray() {
+    	byte[] imageInByte = null;
+    	String extension = getFileExtension(filename);
+    	// convert BufferedImage to byte array
+    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    	try {
+    		ImageIO.write(image, extension, baos);
+    		baos.flush();
+    		imageInByte = baos.toByteArray();
+    		baos.close();
+    	} catch (IOException e) {}
+    	return imageInByte;
+    }
    
 }
