@@ -13,15 +13,32 @@ import javax.swing.*;
 public class View extends JFrame{
  
 	private static final long serialVersionUID = 1L;
+<<<<<<< HEAD
 	private JButton bouton = new JButton("Filtre de Sobel");
 	private JButton bouton2 = new JButton("Second Filtre");
 	private JButton bouton3 = new JButton("Ouvrir...");
 	private JPanel container = new JPanel();
 	private JLabel label = new JLabel();
 	JFileChooser filechooser= new JFileChooser();
+=======
+	private JButton bouton = new JButton("Sobel");
+	private JButton bouton2 = new JButton("Robert's Cross");
+	private JButton bouton3 = new JButton("Prewitt");
+	private JButton boutonFermer = new JButton("Fermer");
+	private JPanel container = new JPanel();
+	private JLabel label = new JLabel();
+    //private Image image ;
+>>>>>>> b7267ad21759843ca75ba9e86c6bc7132802c4d8
   
 	ImageOriginale i ;//= new ImageOriginale("test");
 	SobelFilter f = new SobelFilter();
+<<<<<<< HEAD
+=======
+	RobertsCrossFilter r = new RobertsCrossFilter();
+	PrewittFilter p = new PrewittFilter();
+
+  //ImageIcon image = new ImageIcon();
+>>>>>>> b7267ad21759843ca75ba9e86c6bc7132802c4d8
   
   public View() throws IOException{
 	  
@@ -39,11 +56,19 @@ public class View extends JFrame{
     bouton.addActionListener(new BoutonListener());
     bouton2.addActionListener(new Bouton2Listener());
     bouton3.addActionListener(new Bouton3Listener());
+<<<<<<< HEAD
+=======
+    boutonFermer.addActionListener(new BoutonFermerListener());
+>>>>>>> b7267ad21759843ca75ba9e86c6bc7132802c4d8
         
     JPanel south = new JPanel();
     south.add(bouton);
     south.add(bouton2);
     south.add(bouton3);
+<<<<<<< HEAD
+=======
+    south.add(boutonFermer);
+>>>>>>> b7267ad21759843ca75ba9e86c6bc7132802c4d8
     container.add(south, BorderLayout.SOUTH);
 
     
@@ -56,8 +81,8 @@ public class View extends JFrame{
        
   
   class BoutonListener implements ActionListener{
-    
     public void actionPerformed(ActionEvent arg0) {
+<<<<<<< HEAD
     	String s = "test_sobel_teeeeest.PNG";
 
 		i.applyFilter(f);
@@ -66,14 +91,30 @@ public class View extends JFrame{
 		//System.out.println(filechooser.getSelectedFile().getAbsolutePath());
     	label.setIcon(new ImageIcon(s));
 
+=======
+		i.applyFilter(f);
+		i.save("test_sobel.PNG");
+    	label.setIcon(new ImageIcon("test_sobel.PNG"));
+>>>>>>> b7267ad21759843ca75ba9e86c6bc7132802c4d8
     }
   }
       
  
   class Bouton2Listener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
-   
+    	i.applyFilter(r);
+		i.save("test_sobel.PNG");
+    	label.setIcon(new ImageIcon("test_sobel.PNG"));
     }
+  }     
+  
+  class Bouton3Listener implements ActionListener{
+    public void actionPerformed(ActionEvent e) {
+    	i.applyFilter(p);
+		i.save("test_sobel.PNG");
+    	label.setIcon(new ImageIcon("test_sobel.PNG"));
+    }
+<<<<<<< HEAD
   }
   
   class Bouton3Listener implements ActionListener{
@@ -104,4 +145,14 @@ public class View extends JFrame{
 	        bouton2.setEnabled(true);
 	    }
   }
+=======
+  }  
+  
+  class BoutonFermerListener implements ActionListener{
+    public void actionPerformed(ActionEvent e) {
+    	System.exit(0);
+    }
+  }  
+  
+>>>>>>> b7267ad21759843ca75ba9e86c6bc7132802c4d8
 }

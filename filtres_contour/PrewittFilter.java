@@ -2,7 +2,7 @@ package filtres_contour;
 
 import java.awt.*;
 
-class SobelFilter extends Filtre {
+class PrewittFilter extends Filtre {
 	public int[][] process(int [][] img, int w, int h) {
 		int y,x, R;
 		int out[][] = new int[w][h];
@@ -20,15 +20,15 @@ class SobelFilter extends Filtre {
 				pixelMatrix[2][2]=new Color(img[i+1][j+1]).getRed();
 
 				y = (pixelMatrix[0][0]*-1)+
-					(pixelMatrix[0][1]*-2)+
+					(pixelMatrix[0][1]*-1)+
 					(pixelMatrix[0][2]*-1)+
 					(pixelMatrix[2][0])+
-					(pixelMatrix[2][1]*2)+
+					(pixelMatrix[2][1])+
 					(pixelMatrix[2][2]);
 				x = (pixelMatrix[0][0]*-1)+
 					(pixelMatrix[0][2])+
-					(pixelMatrix[1][0]*-2)+
-					(pixelMatrix[1][2]*2)+
+					(pixelMatrix[1][0]*-1)+
+					(pixelMatrix[1][2])+
 					(pixelMatrix[2][0]*-1)+
 					(pixelMatrix[2][2]);
 					

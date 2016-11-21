@@ -37,7 +37,7 @@ class ImageOriginale {
    public int getHeight() {return height;}
    public int getWidth() {return width;}
    
-   public void applyFilter(SobelFilter f) {
+   public void applyFilter(Filtre f) {
 	   int i, j;
 		pixels = f.process(pixels,width,height);
 		for (i=0; i<width; i++) {
