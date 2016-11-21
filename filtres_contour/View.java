@@ -58,13 +58,13 @@ public class View extends JFrame{
   class BoutonListener implements ActionListener{
     
     public void actionPerformed(ActionEvent arg0) {
-    	
+    	String s = "test_sobel_teeeeest.PNG";
 
 		i.applyFilter(f);
 		
-		i.save("test_sobel_teeeeest.PNG");
+		i.save(s);
 		//System.out.println(filechooser.getSelectedFile().getAbsolutePath());
-    	label.setIcon(new ImageIcon("test_sobel_teeeeest.PNG"));
+    	label.setIcon(new ImageIcon(s));
 
     }
   }
