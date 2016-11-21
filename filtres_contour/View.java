@@ -2,13 +2,18 @@ package filtres_contour;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
  
 
 public class View extends JFrame{
  
 	private static final long serialVersionUID = 1L;
+	private JButton orig = new JButton("Originale");
 	private JButton bouton = new JButton("Sobel");
 	private JButton bouton2 = new JButton("Robert's Cross");
 	private JButton bouton3 = new JButton("Prewitt");
@@ -27,14 +32,31 @@ public class View extends JFrame{
   
   public View() throws IOException{
 	  
+	  
+	  	ImageOriginale line = new ImageOriginale("images/fuck.png");
+	  	int h = line.getHeight();
+		int w = line.getWidth();
+		int[][] img = line.getPixels();
+		Vectorisation v = new Vectorisation(img,w,h);
+		int[][]pix = v.vectorsToRGB();
+		BufferedImage bufferedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		for (int x = 0; x < w; x++) {
+		    for (int y = 0; y < h; y++) {
+		        bufferedImage.setRGB(x, y, pix[x][y]);
+		    }
+		}
+		File outputfile = new File("images/linetest2.png");
+		ImageIO.write(bufferedImage, "png", outputfile);
+	  
     this.setTitle("Projet POO2");
-    this.setSize(500, 600);
+    this.setSize(600, 700);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLocationRelativeTo(null);
  
     container.setBackground(Color.white);
     container.setLayout(new BorderLayout());
    
+    orig.addActionListener(new OrigListener());
     bouton.addActionListener(new BoutonListener());
     bouton2.addActionListener(new Bouton2Listener());
     bouton3.addActionListener(new Bouton3Listener());
@@ -42,6 +64,7 @@ public class View extends JFrame{
     boutonFermer.addActionListener(new BoutonFermerListener());
         
     JPanel south = new JPanel();
+    south.add(orig);
     south.add(bouton);
     south.add(bouton2);
     south.add(bouton3);
@@ -64,7 +87,12 @@ public class View extends JFrame{
     this.setContentPane(container);
     this.setVisible(true);
   }
-       
+    
+  class OrigListener implements ActionListener{
+    public void actionPerformed(ActionEvent arg0) {
+    	label.setIcon(new ImageIcon("images/Valve.png"));
+    }
+  }
   
   class BoutonListener implements ActionListener{
     public void actionPerformed(ActionEvent arg0) {
