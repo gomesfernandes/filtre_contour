@@ -13,26 +13,29 @@ import javax.swing.*;
 public class View extends JFrame{
  
 	private static final long serialVersionUID = 1L;
+
 	private JButton orig = new JButton("Originale");
-	private JButton bouton = new JButton("Sobel");
-	private JButton bouton2 = new JButton("Robert's Cross");
-	private JButton bouton3 = new JButton("Prewitt");
-	private JButton bouton4 = new JButton("NB");
+	private JButton bouton = new JButton("Filtre de Sobel");
+	private JButton bouton2 = new JButton("Filtre de roberts");
+	private JButton bouton3 = new JButton("Ouvrir...");
+	private JButton bouton4 = new JButton("Filtre de Prewitt");
 	private JButton boutonFermer = new JButton("Fermer");
 	private JPanel container = new JPanel();
 	private JLabel label = new JLabel();
-    //private Image image ;
-  
-	ImageOriginale i = new ImageOriginale("images/Valve.png");
+	JFileChooser filechooser= new JFileChooser(System.getProperty("user.dir"));
+
+	ImageOriginale i ;
+
 	SobelFilter f = new SobelFilter();
 	RobertsCrossFilter r = new RobertsCrossFilter();
 	PrewittFilter p = new PrewittFilter();
 
-  //ImageIcon image = new ImageIcon();
   
   public View() throws IOException{
 	  
 	  
+	  	//PARTIE VECTORISATION
+	   // J'AI PAS ENCORE UN MEILLEUR ENDROIT POUR METTRE ÇA :( 
 	  	ImageOriginale line = new ImageOriginale("images/stuff.png");
 	  	int h = line.getHeight();
 		int w = line.getWidth();
@@ -47,22 +50,30 @@ public class View extends JFrame{
 		}
 		File outputfile = new File("images/linetest2.png");
 		ImageIO.write(bufferedImage, "png", outputfile);
+		//FIN PARTIE VECTORISATION
 	  
     this.setTitle("Projet POO2");
     this.setSize(600, 700);
+    this.setMinimumSize(new Dimension(450, 300));
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLocationRelativeTo(null);
  
     container.setBackground(Color.white);
     container.setLayout(new BorderLayout());
+    
+    orig.setEnabled(false);
+    bouton.setEnabled(false);
+    bouton2.setEnabled(false);
+    bouton4.setEnabled(false);
    
     orig.addActionListener(new OrigListener());
     bouton.addActionListener(new BoutonListener());
     bouton2.addActionListener(new Bouton2Listener());
-    bouton3.addActionListener(new Bouton3Listener());
     bouton4.addActionListener(new Bouton4Listener());
+    bouton3.addActionListener(new Bouton3Listener());
     boutonFermer.addActionListener(new BoutonFermerListener());
-        
+    
+    /*
     JPanel south = new JPanel();
     south.add(orig);
     south.add(bouton);
@@ -71,18 +82,27 @@ public class View extends JFrame{
     south.add(bouton4);
     south.add(boutonFermer);
     container.add(south, BorderLayout.SOUTH);
-
-    /*label = new JLabel()
-    {
-        public void paintComponent(Graphics g)
-        {
-            super.paintComponent(g);
-            image.paintIcon(this, g, image.getIconWidth(), image.getIconHeight());
-        }
-    };*/
+    */
+    
+    //creation d'un panel contenant 2 sous-panels pour qu'on puisse avoir 2 rangs de boutons
+    
+    JPanel all_buttons = new JPanel();  
+    all_buttons.setLayout(new BorderLayout());
+    	// d'abord boutons principaux : save, get file,...
+	    JPanel boutons_principaux = new JPanel();
+	    boutons_principaux.add(orig);
+	    boutons_principaux.add(bouton3);
+	    boutons_principaux.add(boutonFermer);
+	    all_buttons.add(boutons_principaux, BorderLayout.NORTH);
+	    // en-dessous les filtres : sobel, roberts,... 
+	    JPanel boutons_filtres = new JPanel();
+	    boutons_filtres.add(bouton);
+	    boutons_filtres.add(bouton2);
+	    boutons_filtres.add(bouton4);
+	    all_buttons.add(boutons_filtres, BorderLayout.SOUTH);
+    container.add(all_buttons, BorderLayout.SOUTH);
     
     label.setHorizontalAlignment(JLabel.CENTER);
-    label.setIcon(new ImageIcon("images/Valve.png"));
     container.add(label, BorderLayout.CENTER);
     this.setContentPane(container);
     this.setVisible(true);
@@ -90,15 +110,13 @@ public class View extends JFrame{
     
   class OrigListener implements ActionListener{
     public void actionPerformed(ActionEvent arg0) {
-    	label.setIcon(new ImageIcon("images/Valve.png"));
+    	label.setIcon(new ImageIcon(i.getFilename()));
     }
   }
   
   class BoutonListener implements ActionListener{
     public void actionPerformed(ActionEvent arg0) {
 		i.applyFilter(f);
-		//i.save("images/test_sobel.PNG");
-    	//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
 		label.setIcon(new ImageIcon(i.getByteArray()));
     }
   }
@@ -107,29 +125,49 @@ public class View extends JFrame{
   class Bouton2Listener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
     	i.applyFilter(r);
-		//i.save("images/test_sobel.PNG");
-    	//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
 		label.setIcon(new ImageIcon(i.getByteArray()));
     }
   }     
   
-  class Bouton3Listener implements ActionListener{
+  class Bouton4Listener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
     	i.applyFilter(p);
-		//i.save("images/test_sobel.PNG");
-		//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
 		label.setIcon(new ImageIcon(i.getByteArray()));
     }
+  }
+  
+  class Bouton3Listener implements ActionListener{
+	    public void actionPerformed(ActionEvent ev) { 	
+	    	
+	    	filechooser.setDialogTitle("Choisissez un fichier..");
+	        filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	        int returnval=filechooser.showOpenDialog(null);
+	        if(returnval==JFileChooser.APPROVE_OPTION)
+	        {
+	            File file = filechooser.getSelectedFile();
+	            BufferedImage bi;
+	            try
+	            {   
+	                bi=ImageIO.read(file);
+	                label.setIcon(new ImageIcon(bi));
+	            }
+	            catch(IOException e)
+	            {
+
+	            }
+	            pack();
+	        }
+	        if (filechooser.getSelectedFile() != null) {
+		        i = new ImageOriginale(filechooser.getSelectedFile().getAbsolutePath());
+		        System.out.println(filechooser.getSelectedFile().getAbsolutePath());
+		        orig.setEnabled(true);
+		        bouton.setEnabled(true);
+		        bouton2.setEnabled(true);
+		        bouton4.setEnabled(true);
+	        }
+	    }
   }  
   
-  class Bouton4Listener implements ActionListener{
-	public void actionPerformed(ActionEvent e) {
-		i.applyTreshold();
-		//i.save("images/test_sobel.PNG");
-		//label.setIcon(new ImageIcon("images/test_sobel.PNG"));
-		label.setIcon(new ImageIcon(i.getByteArray()));
-	}
-  }  
   
   class BoutonFermerListener implements ActionListener{
     public void actionPerformed(ActionEvent e) {

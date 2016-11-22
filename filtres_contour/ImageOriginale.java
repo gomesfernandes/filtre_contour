@@ -38,6 +38,7 @@ class ImageOriginale {
    
    public int getHeight() {return height;}
    public int getWidth() {return width;}
+   public String getFilename() {return filename;}
    //public int[] getRGB() {return rgb;}
    public int[][] getPixels() {return pixels;}
    
