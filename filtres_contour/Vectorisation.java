@@ -1,5 +1,8 @@
 package filtres_contour;
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
@@ -10,7 +13,7 @@ public class Vectorisation {
 	List<ImageVector> vectorlist;
 	
 	public static int[][] treshold(int[][] img, int w, int h) {
-        int THRESHOLD = 70, i=0, j=0;
+        int THRESHOLD = 20, i=0, j=0;
         int bw[][] = new int[w][h];
         for (i = 0; i < w; i++) {
             for (j = 0; j < h; j++) {
@@ -51,19 +54,22 @@ public class Vectorisation {
 						}
 					}
 				}
-				if (r.getN() > 3 && !Double.isNaN(r.getSlope())) { //nminimum number of pixels in section
+				if (r.getN() >= 2 && !Double.isNaN(r.getSlope())) { //nminimum number of pixels in section
 					int ordonnee = (int)Math.round(r.getIntercept());
-					if (ordonnee>=0) {
-						v = new ImageVector(xstart,ordonnee,r.getSlope());
+					if (ordonnee>=0 && r.getSlope() >=0 ) {
+						int y = (int) r.predict(xstart);
+						v = new ImageVector(xstart,y,r.getSlope());
 					} else {
-						int x = (int)((-ordonnee)/(r.getSlope())) + c*d;
+						int x = (int)((l*d-ordonnee)/(r.getSlope())) ;
 						v = new ImageVector(x,ystart,r.getSlope());
-						System.out.println("x :"+x+" ,ystart:"+ystart);
+						//System.out.println("2: x :"+x+" ,ystart:"+ystart);
 					}
-				} else if (r.getN() > 3 && Double.isNaN(r.getSlope())) {
+				} else if (r.getN() >= 2 && Double.isNaN(r.getSlope())) {
 					v = new ImageVector((int)(avgx/cmp),ystart,r.getSlope());
+					//System.out.println("3: x :"+(avgx/cmp)+" ,ystart:"+ystart);
 				}
 				vectorlist.add(v);
+				 
 			}
 			
 		}
@@ -79,6 +85,9 @@ public class Vectorisation {
 				image[i][j] = Color.BLACK.getRGB(); 
 			}
 		}
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter("images/test.svg"))) {
+            bw.write("<svg height=\""+img_h+"\" width=\""+img_w+"\">");
+            bw.write("\n");
 		for (ImageVector segment : vectorlist) {
 			if (segment == null) { continue; }
 			x = segment.getX();
@@ -86,15 +95,15 @@ public class Vectorisation {
 			angle = segment.getAngle();
 			//int maxx = x+d -1;
 			//int maxy = y+d -1;
-			System.out.println("x :"+x+" ,y :"+y);
-			System.out.println("slope :"+segment.getAngle());
+			//System.out.println("x :"+x+" ,y :"+y);
+			//System.out.println("slope :"+segment.getAngle());
 			if (Double.isNaN(angle)) {
 				dx=0;
 				dy=1;
-			} else if (Math.floor(angle) == 0.0) {
+			} else if (Math.round(angle) == 0.0) {
 				dx=1;
 				dy=0;
-			} else if (Math.floor(angle) == -1.0) {
+			} else if (Math.round(angle) == -1.0) {
 				dx=-1;
 				dy=1;
 			} else /*angle == 1 */{
@@ -102,15 +111,22 @@ public class Vectorisation {
 				dy=1;
 			}
 			i = 0;
-			System.out.println("dx :"+dx+" ,dy :"+dy);
-			while (i<d && x<img_w && y<img_h){
-				System.out.println("x :"+x+" ,y :"+y);
+			//System.out.println("dx :"+dx+" ,dy :"+dy);
+			bw.write("<line x1=\""+x+"\" y1=\""+y+"\" ");
+			while (i<d && x<img_w && y<img_h && x>=0 && y>=0){
+				//System.out.println("x :"+x+" ,y :"+y);
 				image[x][y] = Color.WHITE.getRGB(); 
 				i++;
 				x+=dx;
 				y+=dy;
 			}
+			
+			bw.write("x2=\""+x+"\" y2=\""+y+"\" style=\"stroke:rgb(0,0,0);stroke-width:1\" />");
+			bw.write("\n");
 		}
+		
+	            bw.write("</svg>");
+	        }  catch (IOException e) {}
 		
 		return image;
 	}

@@ -33,7 +33,7 @@ public class View extends JFrame{
   public View() throws IOException{
 	  
 	  
-	  	ImageOriginale line = new ImageOriginale("images/fuck.png");
+	  	ImageOriginale line = new ImageOriginale("images/stuff.png");
 	  	int h = line.getHeight();
 		int w = line.getWidth();
 		int[][] img = line.getPixels();

@@ -4,7 +4,7 @@ public class ImageVector {
 	private int x;
 	private int y;
 	private double angle;
-	public static final int DISTANCE = 10;
+	public static final int DISTANCE = 3;
 	
 	public ImageVector(int x,int y, double angle) {
 		this.x = x;
