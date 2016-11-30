@@ -48,10 +48,10 @@ public class View extends JFrame{
 	    btnvect.setEnabled(false);
 	   
 	    btnorig.addActionListener(new OrigListener());
-	    btnsobel.addActionListener(new FiltreListener(sobel));
-	    btnroberts.addActionListener(new FiltreListener(roberts));
-	    btnlaplace.addActionListener(new FiltreListener(laplace));
-	    btnprewitt.addActionListener(new FiltreListener(prewitt));
+	    btnsobel.addActionListener(new SobelListener());
+	    btnroberts.addActionListener(new RobertsListener());
+	    btnlaplace.addActionListener(new LaplaceListener());
+	    btnprewitt.addActionListener(new PrewittListener());
 	    btnvect.addActionListener(new VectListener());
 	    btnfermer.addActionListener(new FermerListener());
 	    btnouvrir.addActionListener(new OuvrirListener());
@@ -87,17 +87,31 @@ public class View extends JFrame{
 	    	label.setIcon(new ImageIcon(i.getFilename()));
 	    }
 	  }
-	  
-	class FiltreListener implements ActionListener {
-		private Filtre f;
-		public FiltreListener(Filtre f) {
-			this.f = f;
-		}
-		public void actionPerformed(ActionEvent arg0) {
-			i.applyFilter(f);
-	    	label.setIcon(new ImageIcon(i.getFilename()));
+	
+	class SobelListener implements ActionListener{
+	    public void actionPerformed(ActionEvent arg0) {
+			i.applyFilter(sobel);
+			label.setIcon(new ImageIcon(i.getByteArray()));
 	    }
-	}
+	  }
+	class RobertsListener implements ActionListener{
+	    public void actionPerformed(ActionEvent arg0) {
+			i.applyFilter(roberts);
+			label.setIcon(new ImageIcon(i.getByteArray()));
+	    }
+	  }
+	class PrewittListener implements ActionListener{
+	    public void actionPerformed(ActionEvent arg0) {
+			i.applyFilter(prewitt);
+			label.setIcon(new ImageIcon(i.getByteArray()));
+	    }
+	  }
+	class LaplaceListener implements ActionListener{
+	    public void actionPerformed(ActionEvent arg0) {
+			i.applyFilter(laplace);
+			label.setIcon(new ImageIcon(i.getByteArray()));
+	    }
+	  }
 	
 	  class VectListener implements ActionListener{
 	    public void actionPerformed(ActionEvent e) {
