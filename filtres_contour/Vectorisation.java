@@ -12,22 +12,6 @@ public class Vectorisation {
 	private int img_h;
 	List<ImageVector> vectorlist;
 	
-	public static int[][] treshold(int[][] img, int w, int h) {
-        int THRESHOLD = 20, i=0, j=0;
-        int bw[][] = new int[w][h];
-        for (i = 0; i < w; i++) {
-            for (j = 0; j < h; j++) {
-                Color c = new Color(img[i][j]);
-                double lum =  0.299*c.getRed() + 0.587*c.getGreen() + 0.114*c.getBlue();
-                if (lum >= THRESHOLD) 
-                	bw[i][j] = Color.WHITE.getRGB();
-                else  
-                	bw[i][j] = Color.BLACK.getRGB();
-            }
-        }
-        return bw;
-    }
-	
 	public Vectorisation(int[][] img, int w, int h) {
 		ImageVector v = null;
 		int i,j,c,l, imgbw[][], cols,lines,d = ImageVector.DISTANCE;
@@ -36,7 +20,9 @@ public class Vectorisation {
 		this.vectorlist = new ArrayList<ImageVector>();
 		cols = (int)Math.ceil(((double)w)/d);
 		lines = (int)Math.ceil(((double)h)/d);
-		imgbw = treshold(img,w,h);
+		
+		NoirBlanc nb = new NoirBlanc(20);
+		imgbw = nb.process(img,w,h);
 		
 		for (c=0; c<cols; c++) {
 			for (l=0;l<lines;l++) {

@@ -7,61 +7,89 @@ import javax.imageio.ImageIO;
 class ImageOriginale {
    private BufferedImage image;
    private BufferedImage imageModifiee;
-   private String filename;
-   private int width;
-   private int height;
-   //private int[] rgb;
+   private String nomfichier;
+   private int largeur;
+   private int hauteur;
    private int[][] pixels;
    
    public ImageOriginale(String nom) {
-		filename = nom;
+	   nomfichier = nom;
 		try {
-			image = ImageIO.read(new File(filename));
-			width = image.getWidth();
-			height = image.getHeight();
+			image = ImageIO.read(new File(nomfichier));
+			largeur = image.getWidth();
+			hauteur = image.getHeight();
 			
-			pixels = new int[width][height];
+			pixels = new int[largeur][hauteur];
 			int i,j;
-			for (i=0; i<width; i++) {
-				for (j=0; j<height; j++) {
+			for (i=0; i<largeur; i++) {
+				for (j=0; j<hauteur; j++) {
 					pixels[i][j] = image.getRGB(i,j);
 				}
 			} 
 			
-			int [] rgb = image.getRGB(0, 0, width, height, null, 0, width);
-			imageModifiee = new BufferedImage(width,height,image.getType()); 
-			imageModifiee.setRGB(0, 0, width, height, rgb, 0, width);
+			int [] rgb = image.getRGB(0, 0, largeur, hauteur, null, 0, largeur);
+			imageModifiee = new BufferedImage(largeur,hauteur,image.getType()); 
+			imageModifiee.setRGB(0, 0, largeur, hauteur, rgb, 0, largeur);
 		} catch (Exception e) {
 		   e.printStackTrace();
 		}
    }
    
-   public int getHeight() {return height;}
-   public int getWidth() {return width;}
-   public String getFilename() {return filename;}
-   //public int[] getRGB() {return rgb;}
+   public int getHeight() {return hauteur;}
+   public int getWidth() {return largeur;}
+   public String getFilename() {return nomfichier;}
    public int[][] getPixels() {return pixels;}
+   
+   public byte[] getByteArray() {
+		byte[] imageInByte = null;
+		String extension = getFileExtension(nomfichier);
+		// convert BufferedImage to byte array
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(imageModifiee, extension, baos);
+			baos.flush();
+			imageInByte = baos.toByteArray();
+			baos.close();
+		} catch (IOException e) {
+			System.err.println("Echec de conversion en bytes");
+		}
+		return imageInByte;
+   }
    
    public void applyFilter(Filtre f) {
 	   int i, j;
-	   int[][] output = f.process(pixels,width,height);
-		for (i=0; i<width; i++) {
-			for (j=0; j<height; j++) {
+	   int[][] output;
+	   
+	   /*
+	   // reduire bruit ou pas ? 
+	   FiltreMedian noise_reduction = new FiltreMedian();
+	   output = noise_reduction.process(pixels,largeur,hauteur);
+	   */
+	   
+	   output = f.process(pixels,largeur,hauteur);
+		for (i=0; i<largeur; i++) {
+			for (j=0; j<hauteur; j++) {
 				imageModifiee.setRGB(i,j,output[i][j]); 
 			}
 		} 
-		//rgb = image.getRGB(0, 0, width, height, null, 0, width);
    }
    
-   public void applyTreshold() {
+   public void vectorisation() {
 	   int i, j;
-	   int[][] output = Vectorisation.treshold(pixels,width,height);
-		for (i=0; i<width; i++) {
-			for (j=0; j<height; j++) {
+	   int [][] output = new int[largeur][hauteur];
+	   for (i=0; i<largeur; i++) {
+			for (j=0; j<hauteur; j++) {
+				output[i][j] = imageModifiee.getRGB(i,j);
+			}
+		} 
+	   
+	   Vectorisation v = new Vectorisation(output,largeur,hauteur);
+	   output = v.vectorsToRGB();
+		for (i=0; i<largeur; i++) {
+			for (j=0; j<hauteur; j++) {
 				imageModifiee.setRGB(i,j,output[i][j]); 
 			}
 		} 
-		//rgb = image.getRGB(0, 0, width, height, null, 0, width);
    }
     
    private static String getFileExtension(String filename) {
@@ -74,11 +102,11 @@ class ImageOriginale {
    }
    
    public void save() {
-	   String extension = getFileExtension(filename);
+	   String extension = getFileExtension(nomfichier);
 		try {
-			ImageIO.write(imageModifiee, extension,new File(filename));
+			ImageIO.write(imageModifiee, extension,new File(nomfichier));
 		} catch (IOException io) {
-			System.out.println("Cannot save to file.");
+			System.err.println("Echec de sauvegarde.");
 		}
    }
    
@@ -88,22 +116,8 @@ class ImageOriginale {
 			File outputfile = new File(newname);
 			ImageIO.write(imageModifiee, extension,outputfile);
 		} catch (IOException io) {
-			System.out.println("Cannot save to file.");
+			System.err.println("Echec de sauvegarde.");
 		}
    }
     
-    public byte[] getByteArray() {
-    	byte[] imageInByte = null;
-    	String extension = getFileExtension(filename);
-    	// convert BufferedImage to byte array
-    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    	try {
-    		ImageIO.write(imageModifiee, extension, baos);
-    		baos.flush();
-    		imageInByte = baos.toByteArray();
-    		baos.close();
-    	} catch (IOException e) {}
-    	return imageInByte;
-    }
-   
 }
