@@ -113,6 +113,7 @@ class ImageOriginale {
    
     public void save(String newname) {
 		String extension = getFileExtension(newname);
+		if (extension == "") extension = "jpg";
 		try {
 			File outputfile = new File(newname);
 			ImageIO.write(imageModifiee, extension,outputfile);

@@ -15,7 +15,7 @@ public class View extends JFrame{
 	private JButton btnouvrir = new JButton("Ouvrir...");
 	private JButton btnfermer = new JButton("Fermer");
 	
-	private JButton btnsauver = new JButton("Sauver");
+	private JButton btnsauver = new JButton("Sauvegarder");
 	
 	private JButton btnsobel = new JButton("Sobel");
 	private JButton btnroberts = new JButton("Roberts");
