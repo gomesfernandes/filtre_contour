@@ -12,16 +12,20 @@ import javax.swing.*;
 public class View extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JButton btnorig = new JButton("Originale");
+	private JButton btnouvrir = new JButton("Ouvrir...");
+	private JButton btnfermer = new JButton("Fermer");
+	
+	private JButton btnsauver = new JButton("Sauver");
+	
 	private JButton btnsobel = new JButton("Sobel");
 	private JButton btnroberts = new JButton("Roberts");
-	private JButton btnouvrir = new JButton("Ouvrir...");
 	private JButton btnprewitt = new JButton("Prewitt");
 	private JButton btnlaplace = new JButton("Laplace");
 	private JButton btnvect = new JButton("Vectoriser");
-	private JButton btnfermer = new JButton("Fermer");
 	private JPanel container = new JPanel();
 	private JLabel label = new JLabel();
 	JFileChooser filechooser= new JFileChooser(System.getProperty("user.dir"));
+	JFileChooser filesaver= new JFileChooser(System.getProperty("user.dir"));
 	
 	ImageOriginale i;
 	FiltreSobel sobel = new FiltreSobel();
@@ -56,6 +60,8 @@ public class View extends JFrame{
 	    btnfermer.addActionListener(new FermerListener());
 	    btnouvrir.addActionListener(new OuvrirListener());
 	    
+	    btnsauver.addActionListener(new SauverListener());
+	    
 	    //creation d'un panel contenant 2 sous-panels pour qu'on puisse avoir 2 rangs de boutons
 	    
 	    JPanel all_buttons = new JPanel();  
@@ -65,6 +71,7 @@ public class View extends JFrame{
 		    boutons_principaux.add(btnorig);
 		    boutons_principaux.add(btnouvrir);
 		    boutons_principaux.add(btnfermer);
+		    boutons_principaux.add(btnsauver);
 		    all_buttons.add(boutons_principaux, BorderLayout.NORTH);
 		    // en-dessous les filtres : sobel, roberts,... 
 		    JPanel boutons_filtres = new JPanel();
@@ -152,6 +159,19 @@ public class View extends JFrame{
 	    }
 	  }  
 	  
+	  class SauverListener implements ActionListener{
+		    public void actionPerformed(ActionEvent ev) { 	
+		    	
+		    	filesaver.setDialogTitle("Choisissez un fichier..");
+		    	filesaver.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		        int returnval=filesaver.showSaveDialog(null);
+		        if(returnval==JFileChooser.APPROVE_OPTION)
+		        {
+		            File file = filesaver.getSelectedFile();
+		            i.save(file.getName());
+		        }
+		    }
+		  }
 	  
 	  class FermerListener implements ActionListener{
 	    public void actionPerformed(ActionEvent e) {
