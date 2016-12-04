@@ -66,8 +66,7 @@ class ImageOriginale {
 	   // reduire bruit ou pas ? 
 	   FiltreMedian noise_reduction = new FiltreMedian();
 	   output = noise_reduction.process(output,largeur,hauteur);
-	   
-	   
+	  
 	   output = f.process(output,largeur,hauteur);
 		for (i=0; i<largeur; i++) {
 			for (j=0; j<hauteur; j++) {
