@@ -1,5 +1,8 @@
 package filtres_contour;
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 //import java.io.BufferedWriter;
 //import java.io.FileWriter;
 //import java.io.IOException;
@@ -71,9 +74,10 @@ public class Vectorisation {
 				image[i][j] = Color.BLACK.getRGB(); 
 			}
 		}
-		//try (BufferedWriter bw = new BufferedWriter(new FileWriter("images/test.svg"))) {
-           // bw.write("<svg height=\""+img_h+"\" width=\""+img_w+"\">");
-           // bw.write("\n");
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter("images/test.svg"))) {
+            bw.write("<svg version=\"1.1\" "+
+	     "xmlns=\"http://www.w3.org/2000/svg\" baseProfile=\"full\" height=\""+img_h+"\" width=\""+img_w+"\">");
+            bw.write("\n");
 		for (ImageVector segment : vectorlist) {
 			if (segment == null) { continue; }
 			x = segment.getX();
@@ -98,7 +102,7 @@ public class Vectorisation {
 			}
 			i = 0;
 			//System.out.println("dx :"+dx+" ,dy :"+dy);
-			//bw.write("<line x1=\""+x+"\" y1=\""+y+"\" ");
+			bw.write("<line x1=\""+x+"\" y1=\""+y+"\" ");
 			while (i<d && x<img_w && y<img_h && x>=0 && y>=0){
 				//System.out.println("x :"+x+" ,y :"+y);
 				image[x][y] = Color.WHITE.getRGB(); 
@@ -107,12 +111,12 @@ public class Vectorisation {
 				y+=dy;
 			}
 			
-			//bw.write("x2=\""+x+"\" y2=\""+y+"\" style=\"stroke:rgb(0,0,0);stroke-width:1\" />");
-			//bw.write("\n");
+			bw.write("x2=\""+x+"\" y2=\""+y+"\" style=\"stroke:rgb(0,0,0);stroke-width:1\" />");
+			bw.write("\n");
 		}
 		
-	            //bw.write("</svg>");
-	       // }  catch (IOException e) {}
+	            bw.write("</svg>");
+	       }  catch (IOException e) {}
 		
 		return image;
 	}

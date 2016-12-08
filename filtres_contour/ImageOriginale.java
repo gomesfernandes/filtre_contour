@@ -63,7 +63,6 @@ class ImageOriginale {
 	   NuancesGris ng = new NuancesGris();
 	   output = ng.process(pixels,largeur,hauteur);
 	   
-	   // reduire bruit ou pas ? 
 	   FiltreMedian noise_reduction = new FiltreMedian();
 	   output = noise_reduction.process(output,largeur,hauteur);
 	  
