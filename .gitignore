@@ -1,1 +1,4 @@
-bla.jpg
+.classpath
+.settings
+.DS_Store
+filtres_contour/*.class
